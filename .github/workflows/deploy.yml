@@ -1,0 +1,52 @@
+name: Déploiement Continue de la solution
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Récupération du code
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      # Installation et build du projet
+      - name: Build du project Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          npm ci
+          mkdir build
+          npm run build
+          cp -r dist/connect-zone/browser/* build/
+
+          # ✅ Ajout du .htaccess pour les routes SPA
+          cat <<'EOF' > build/.htaccess
+          <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteBase /
+            RewriteRule ^index\.html$ - [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule . /index.html [L]
+          </IfModule>
+          EOF
+
+      # Déploiement FTP vers Obambu
+      - name: Déploiement sur Obambu
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build/
+          server-dir: /connect-zone.gillesngassam.com/
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/.cache*
