@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial Narrow Bold', sans-serif, Geneva, Tahoma, sans-serif;
+  line-height: 150%;
+}
+
+:root {
+  // Colors variables
+  --main-color: rgb(63, 95, 191);
+
+
+
+  // Fonts variables
+
+
+  // Dimensions variables
+  --spacing-unit: 5px;
+}
