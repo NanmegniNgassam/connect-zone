@@ -2,7 +2,8 @@
   <div class="title">Connect-Zone</div>
 
   <p class="copyrights">
-    @Copyrights {{ currentDate.getFullYear() }}. All rights reserved to
+    @Copyrights {{ currentDate | date: 'MMMM' }} {{ currentDate | date: 'y' }}. All rights reserved
+    to
     <a href="https://gillesngassam.com/" target="_blank">Gilles NGASSAM</a>
   </p>
 </footer>
