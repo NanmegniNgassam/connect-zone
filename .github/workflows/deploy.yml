@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 20
       - run: |
-          npm ci
+          npm install
           mkdir build
           npm run build
           cp -r dist/connect-zone/browser/* build/
